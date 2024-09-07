@@ -1,0 +1,9 @@
+curl -X POST 'http://localhost:8787/api/ask' \
+-H 'Content-Type: application/json' \
+-d '{
+  "spokenText": "뭐라고",
+  "coordinates": {
+    "latitude": 37.580067,
+    "longitude": 127.045147
+  }
+}'

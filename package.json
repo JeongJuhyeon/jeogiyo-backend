@@ -16,5 +16,16 @@
     "vitest": "1.5.0",
     "wrangler": "^3.75.0"
   },
-  "packageManager": "yarn@4.4.0+sha512.91d93b445d9284e7ed52931369bc89a663414e5582d00eea45c67ddc459a2582919eece27c412d6ffd1bd0793ff35399381cb229326b961798ce4f4cc60ddfdb"
+  "packageManager": "yarn@4.4.0+sha512.91d93b445d9284e7ed52931369bc89a663414e5582d00eea45c67ddc459a2582919eece27c412d6ffd1bd0793ff35399381cb229326b961798ce4f4cc60ddfdb",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
+    "@hono/zod-validator": "^0.2.2",
+    "@supabase/supabase-js": "^2.45.3",
+    "change-case": "^5.4.4",
+    "crc": "^4.3.2",
+    "hono": "4.5.5",
+    "openai": "^4.58.1",
+    "remeda": "^2.12.0",
+    "zod": "^3.23.8"
+  }
 }
