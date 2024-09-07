@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const stringContainsKorean = (str: string): boolean => {
-    const korean = /[\u3131-\uD79D]/;
-    return korean.test(str);
-}
+	const korean = /[\u3131-\uD79D]/;
+	return korean.test(str);
+};
 
 export function indent(str: string, level: number = 1): string {
 	const indent = ' '.repeat(level * 2);
@@ -23,11 +23,23 @@ export const createTagValidator = (tag: string) => {
 			(val) => regex.test(val),
 			(s) => ({
 				message: `Expected a string that contains a single <${tag}>...</${tag}> tag, got ${s}`,
-			}),
+			})
 		)
 		.transform((val) => val.match(regex)![1].trim());
 };
 
 export function throwInline(message: string): never {
 	throw new Error(message);
+}
+
+export function contentIsStation(content: string): boolean {
+	// Korean: No whitespace and ends in "역"
+	if (!content.includes(' ') && content.endsWith('역')) {
+		return true;
+	}
+	// English: Two words, first word has a capital, second word is "Station"
+	if (content.match(/^[A-Z][a-z]+ [sS]tation$/)) {
+		return true;
+	}
+	return false;
 }

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ConfirmDirectionResult } from './types.js';
 
 export const AskRequest = z.object({
 	spokenText: z.string(),
@@ -12,12 +13,18 @@ export enum QuestionType {
 	UNKNOWN = 'UNKNOWN',
 	TO_DESTINATION = 'TO_DESTINATION',
 	REPEAT_LAST_RESPONSE = 'REPEAT_LAST_RESPONSE',
+	CONFIRM_DIRECTION = 'CONFIRM_DIRECTION',
 }
 
 const ToDestinationResponseData = z.object({
-	direction_next_station: z.string(),
+	directionNextStation: z.string(),
 	instructions: z.array(z.string()),
 });
+const ConfirmDirectionResponseData = z.object({
+	result: z.nativeEnum(ConfirmDirectionResult),
+	instruction: z.string(),
+});
+
 const RepeatLastResponseData = z.object({});
 const UnknownResponseData = z.object({});
 
@@ -38,6 +45,10 @@ export const AskResponseData = z.discriminatedUnion('questionType', [
 	z.object({
 		questionType: z.literal(QuestionType.UNKNOWN),
 		data: UnknownResponseData,
+	}),
+	z.object({
+		questionType: z.literal(QuestionType.CONFIRM_DIRECTION),
+		data: ConfirmDirectionResponseData,
 	}),
 ]);
 export type AskResponseData = z.infer<typeof AskResponseData>;

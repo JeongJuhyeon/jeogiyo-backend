@@ -1,7 +1,7 @@
 import { MyEnv } from './index.js';
 import { execute } from './openai.js';
-import { classificationQuery, prepQuery, translationQuery } from './prompts.js';
-import { stringContainsKorean } from './util.js';
+import { classificationQuery, extractDestinationQuery, prepQuery, translationQuery } from './prompts.js';
+import { contentIsStation, stringContainsKorean } from './util.js';
 
 export async function translateQuestion(content: string, deps: { env: MyEnv }): Promise<string> {
 	let englishQuestion: string;
@@ -16,9 +16,22 @@ export async function translateQuestion(content: string, deps: { env: MyEnv }): 
 }
 
 export async function classifyQuestion(question: string, deps: { env: MyEnv }) {
+	// If question has no whitespace and ends in "역", it's a destination question
+	if (contentIsStation(question)) {
+		return 'HOW_TO_GET_TO_STATION';
+	}
+
 	const query = classificationQuery;
 	const prompt = query.prompt(question);
-	const s = prepQuery(query, prompt);
-	const classification = await execute(s, { env: deps.env });
+	const preppedQuery = prepQuery(query, prompt);
+	const classification = await execute(preppedQuery, { env: deps.env });
+	return classification;
+}
+
+export async function extractDestination(question: string, deps: { env: MyEnv }) {
+	const query = extractDestinationQuery;
+	const prompt = query.prompt(question);
+	const preppedQuery = prepQuery(query, prompt);
+	const classification = await execute(preppedQuery, { env: deps.env });
 	return classification;
 }

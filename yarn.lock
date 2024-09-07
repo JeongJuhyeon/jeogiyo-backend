@@ -1700,6 +1700,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"geolib@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "geolib@npm:3.3.4"
+  checksum: 10c0/7e18b28c825ad1bd1e4d4166a991659caaf5c779b73818b8dd00c2d6c60b59b208116c22cb1f93830c03571ac498f09586e77173e223bf56615ddace22d8de51
+  languageName: node
+  linkType: hard
+
 "get-func-name@npm:^2.0.1, get-func-name@npm:^2.0.2":
   version: 2.0.2
   resolution: "get-func-name@npm:2.0.2"
@@ -2000,6 +2007,7 @@ __metadata:
     "@supabase/supabase-js": "npm:^2.45.3"
     change-case: "npm:^5.4.4"
     crc: "npm:^4.3.2"
+    geolib: "npm:^3.3.4"
     hono: "npm:4.5.5"
     openai: "npm:^4.58.1"
     remeda: "npm:^2.12.0"

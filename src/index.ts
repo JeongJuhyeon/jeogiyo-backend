@@ -5,6 +5,10 @@ import { AskRequest, AskResponse, AskResponseData, QuestionType } from './reques
 import { z } from 'zod';
 import { completeChat } from './openai.js';
 import { classifyQuestion, translateQuestion } from './llmservice.js';
+import { confirmDirection, findNextStation, getLastCoordinates, storeLastcoordinates } from './navigation.js';
+import { throwInline } from './util.js';
+import { Coordinates } from './types.js';
+import { pick } from 'remeda';
 
 export interface MyEnv {
 	SUPABASE_SERVICE_ROLE_KEY: string;
@@ -12,6 +16,7 @@ export interface MyEnv {
 	AWS_ACCESS_KEY: string;
 	AWS_SECRET_ACCESS_KEY: string;
 	OPENAI_API_KEY: string;
+	COORDINATES_KV: KVNamespace;
 }
 export type HonoEnv = { Bindings: MyEnv; Variables: {} };
 const app = new Hono<HonoEnv>();
@@ -42,14 +47,32 @@ const routes = app
 				questionType: QuestionType.UNKNOWN,
 				data: {},
 			};
-		} else {
+		} else if (questionClassification === 'HOW_TO_GET_TO_STATION') {
+			const nextStationData = await findNextStation(englishSpokenText, reqBody.coordinates, c);
 			responseData = {
 				questionType: QuestionType.TO_DESTINATION,
-				data: {
-					direction_next_station: '제기동역',
-					instructions: ['서울역까지 1호선 타세요.', 'GPT says: ' + questionClassification],
-				},
+				data: pick(nextStationData, ['directionNextStation', 'instructions']),
 			};
+			if ('destinationCoordinates' in nextStationData) {
+				await storeLastcoordinates({ user: reqBody.coordinates, destination: nextStationData.destinationCoordinates! }, c);
+			}
+		} else if (questionClassification === 'CONFIRM_CURRENT_DIRECTION') {
+			const lastCoordinates = await getLastCoordinates(c);
+			if (!('user' in lastCoordinates)) {
+				throwInline('No previous coordinates found');
+			}
+
+			const result = confirmDirection({
+				current: reqBody.coordinates,
+				previous: lastCoordinates.user,
+				destination: lastCoordinates.destination,
+			});
+			responseData = {
+				questionType: QuestionType.CONFIRM_DIRECTION,
+				data: result,
+			};
+		} else {
+			throwInline(`Invalid question classification: ${questionClassification}`);
 		}
 
 		const response: AskResponse = {
