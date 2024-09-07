@@ -24,7 +24,9 @@ export const prepQuery = <T extends ZodType>(query: Query<T>, content: string) =
 
 // Prompt for translating a Korean sentence to English
 
-const translationPrompt: Prompt = (content: string) => `Translate the following text to English within <output> tags: 
+const translationPrompt: Prompt = (
+	content: string
+) => `Translate the following text to English within <output> tags in the context of public transit navigation: 
 
 ${wrapTags('input', content)}
 
@@ -40,9 +42,9 @@ const classificationPrompt: Prompt = (
 	content: string
 ) => `Classify the following text into one of the following categories within <output> tags:
 
-1. Ask how to get to a subway station (HOW_TO_GET_TO_STATION)
-2. Ask to repeat the last response (REPEAT_LAST_RESPONSE)
-3. Ask if I'm going the right way (CONFIRM_CURRENT_DIRECTION)
+1. Ask if they're currently going the right way (CONFIRM_CURRENT_DIRECTION)
+2. Ask how to get to a subway station (HOW_TO_GET_TO_STATION)
+3. Ask to repeat the last response (REPEAT_LAST_RESPONSE)
 4. Anything else (OTHER)
 
 ${wrapTags('input', content)}

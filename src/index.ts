@@ -35,6 +35,7 @@ const routes = app
 	.post('/api/ask', zValidator('json', AskRequest), async (c) => {
 		const reqBody = c.req.valid('json');
 		const englishSpokenText = await translateQuestion(reqBody.spokenText, c);
+		console.log('English spoken text:', englishSpokenText);
 		const questionClassification = await classifyQuestion(englishSpokenText, c);
 		let responseData: AskResponseData;
 		if (questionClassification === 'REPEAT_LAST_RESPONSE') {
@@ -59,7 +60,10 @@ const routes = app
 		} else if (questionClassification === 'CONFIRM_CURRENT_DIRECTION') {
 			const lastCoordinates = await getLastCoordinates(c);
 			if (!('user' in lastCoordinates)) {
-				throwInline('No previous coordinates found');
+				return c.json({
+					success: false,
+					error: 'No previous coordinates found. 적어도 한번 어디 가고 싶은지 물어봐줬어야 해요.',
+				});
 			}
 
 			const result = confirmDirection({
