@@ -17,8 +17,11 @@ coordinates: {
 }
 ```
 
-spokenText: The user's question or command in their native language.
-coordinates: The current geographical location of the user.
+- spokenText: The user's question or command in their native language.
+- coordinates: The current geographical location of the user.
+
+- spokenText: 받은 speech 입력
+- coordinates: 현재 위치 좌표
 
 # Response
 
@@ -32,9 +35,13 @@ data: ResponseData
 }
 ```
 
-success: Indicates whether the request was processed successfully.
-questionType: The classified type of the user's question.
-data: Contains type-specific response data based on the questionType.
+- success: Indicates whether the request was processed successfully.
+- questionType: The classified type of the user's question.
+- data: Contains type-specific response data based on the questionType.
+
+- success: 요청 서리 성공 여부
+- questionType: 유저 질문 종류
+- data: questionType에 따른 유형의 응답 데이터
 
 ## Question Types and Response Data
 
