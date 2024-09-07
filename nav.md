@@ -67,10 +67,16 @@ Future<void> _getLocation() async {
   if (await _checkAndRequestPermission()) {
     final Location location = await FlLocation.getLocation();
     print('location: ${location.toJson()}');
+    // return {
+    //   'latitude': location.latitude,
+    //   'longitude': location.longitude,
+    // };
+
+    // For demo inside the building, use Yaksu station coordinates
     return {
-      'latitude': location.latitude,
-      'longitude': location.longitude,
-    };
+        'latitude': 37.554759,
+        'longitude': 127.010649
+    }
   }
 }
 
