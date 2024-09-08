@@ -28,7 +28,7 @@ const translationPrompt: Prompt = (
 	content: string
 ) => `Translate the following text to English within <output> tags in the context of public transit navigation: 
 
-${wrapTags('input', content)}
+${wrapTags('input', content.split('?')[0] + '?')}
 
 `;
 export const translationQuery = {
